@@ -44,7 +44,7 @@ public extension HeroExtension where Base: UIViewController {
           return config
         }
         let config = HeroViewControllerConfig()
-        self.config = config
+        objc_setAssociatedObject(base, $0, config, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
         return config
       }
     }
