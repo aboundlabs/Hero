@@ -39,14 +39,20 @@ public extension HeroExtension where Base: UIViewController {
 
   internal var config: HeroViewControllerConfig {
     get {
-      if let config = objc_getAssociatedObject(base, &type(of: base).AssociatedKeys.heroConfig) as? HeroViewControllerConfig {
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroConfig) {
+        if let config = objc_getAssociatedObject(base, $0) as? HeroViewControllerConfig {
+          return config
+        }
+        let config = HeroViewControllerConfig()
+        self.config = config
         return config
       }
-      let config = HeroViewControllerConfig()
-      self.config = config
-      return config
     }
-    set { objc_setAssociatedObject(base, &type(of: base).AssociatedKeys.heroConfig, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    set {
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroConfig) {
+        objc_setAssociatedObject(base, $0, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      }
+    }
   }
 
   /// used for .overFullScreen presentation

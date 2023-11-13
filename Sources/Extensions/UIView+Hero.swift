@@ -52,8 +52,16 @@ public extension HeroExtension where Base: UIView {
    Hero will automatically transit the views from source state to the destination state.
    */
    var id: String? {
-    get { return objc_getAssociatedObject(base, &type(of: base).AssociatedKeys.heroID) as? String }
-    set { objc_setAssociatedObject(base, &type(of: base).AssociatedKeys.heroID, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    get {
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroID) {
+        objc_getAssociatedObject(base, $0) as? String
+      }
+    }
+    set {
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroID) {
+        objc_setAssociatedObject(base, $0, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      }
+    }
   }
 
   /**
@@ -61,8 +69,16 @@ public extension HeroExtension where Base: UIView {
    If true, Hero will search through all the subviews for heroIds and modifiers. Defaults to true
    */
   var isEnabled: Bool {
-    get { return objc_getAssociatedObject(base, &type(of: base).AssociatedKeys.heroEnabled) as? Bool ?? true }
-    set { objc_setAssociatedObject(base, &type(of: base).AssociatedKeys.heroEnabled, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    get {
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroEnabled) {
+        objc_getAssociatedObject(base, $0) as? Bool ?? true
+      }
+    }
+    set {
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroEnabled) {
+        objc_setAssociatedObject(base, $0, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      }
+    }
   }
 
   /**
@@ -70,16 +86,32 @@ public extension HeroExtension where Base: UIView {
    If true, Hero will search through all the subviews for heroIds and modifiers. Defaults to true
    */
   var isEnabledForSubviews: Bool {
-    get { return objc_getAssociatedObject(base, &type(of: base).AssociatedKeys.heroEnabledForSubviews) as? Bool ?? true }
-    set { objc_setAssociatedObject(base, &type(of: base).AssociatedKeys.heroEnabledForSubviews, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    get {
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroEnabledForSubviews) {
+        objc_getAssociatedObject(base, $0) as? Bool ?? true
+      }
+    }
+    set {
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroEnabledForSubviews) {
+        objc_setAssociatedObject(base, $0, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      }
+    }
   }
 
   /**
    Use **modifiers** to specify animations alongside the main transition. Checkout `HeroModifier.swift` for available modifiers.
    */
   var modifiers: [HeroModifier]? {
-    get { return objc_getAssociatedObject(base, &type(of: base).AssociatedKeys.heroModifiers) as? [HeroModifier] }
-    set { objc_setAssociatedObject(base, &type(of: base).AssociatedKeys.heroModifiers, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC) }
+    get {
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroModifiers) {
+        objc_getAssociatedObject(base, $0) as? [HeroModifier]
+      }
+    }
+    set {
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroModifiers) {
+        objc_setAssociatedObject(base, $0, newValue, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      }
+    }
   }
 
   /**
@@ -93,16 +125,20 @@ public extension HeroExtension where Base: UIView {
   /// Used for .overFullScreen presentation
   internal var storedAlpha: CGFloat? {
     get {
-      if let doubleValue = (objc_getAssociatedObject(base, &type(of: base).AssociatedKeys.heroStoredAlpha) as? NSNumber)?.doubleValue {
-        return CGFloat(doubleValue)
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroStoredAlpha) {
+        if let doubleValue = (objc_getAssociatedObject(base, $0) as? NSNumber)?.doubleValue {
+          return CGFloat(doubleValue)
+        }
+        return nil
       }
-      return nil
     }
     set {
-      if let newValue = newValue {
-        objc_setAssociatedObject(base, &type(of: base).AssociatedKeys.heroStoredAlpha, NSNumber(value: newValue.native), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-      } else {
-        objc_setAssociatedObject(base, &type(of: base).AssociatedKeys.heroStoredAlpha, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+      withUnsafePointer(to: &type(of: base).AssociatedKeys.heroStoredAlpha) {
+        if let newValue = newValue {
+          objc_setAssociatedObject(base, $0, NSNumber(value: newValue.native), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        } else {
+          objc_setAssociatedObject(base, $0, nil, .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+        }
       }
     }
   }
